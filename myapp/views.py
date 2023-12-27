@@ -33,6 +33,7 @@ def signup_view(request):
         form = UserCreationForm()
     return render(request, 'reg/signup.html', {'form': form})
 
+@csrf_exempt
 @login_required
 def chat(request):
     alpha =[]
