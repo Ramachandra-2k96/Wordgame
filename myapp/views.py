@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Message
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -19,7 +21,7 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'reg/login.html', {'form': form})
-
+@csrf_exempt
 def signup_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
