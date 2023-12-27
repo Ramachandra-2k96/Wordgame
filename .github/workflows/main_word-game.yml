@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'word-game'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_978BE9DE05D549F3858F710777FF46C5 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8403E1B8708C41328383E1D1A9D19A36 }}
