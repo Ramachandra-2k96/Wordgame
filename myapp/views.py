@@ -37,7 +37,7 @@ def signup_view(request):
 @login_required
 def chat(request):
     alpha =[]
-    timeout = 8
+    timeout = 30
     for i in range(97,97+26,1):                      
             alpha.append(chr(i))
     if request.method == 'POST':
