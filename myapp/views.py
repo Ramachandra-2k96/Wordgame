@@ -56,7 +56,7 @@ def chat(request):
             computer_response = f"You loose<br>Because of illegal word <q>{user_message}</q>"
             return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': "Computer has won the game"})
         
-        if com_word == None:
+        if com_word is None:
             return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': f"{user.username}won the game"})
         existing_content = Message.objects.filter(user=request.user,content=user_message.lower()).exists()
         existing_computer_response = Message.objects.filter(user=request.user,computer_response=user_message.lower()).exists()
