@@ -1,0 +1,197 @@
+<!-- chat/templates/chat/chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #chat-header {
+            background-color: #075e54;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+        }
+        #chat-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: scroll;
+            max-height: 400px;
+            padding: 10px;
+        }
+        #chat-form {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #f0f0f0;
+        }
+        #user_message {
+            flex: 1;
+            padding: 8px;
+            margin-right: 10px;
+        }
+        #send-button {
+            background-color: #25d366;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        .message-container {
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .user-message {
+            float: right;
+            background-color: #dcf8c6;
+            border-radius: 10px;
+            padding: 8px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            float: right;
+            background-color: #dcf8c6;
+            border-radius: 10px;
+            padding: 8px;
+            max-width: 70%;
+            word-wrap: break-word;
+            margin-left: 30%;
+        }
+    
+        .computer-message {
+            float: left;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 8px;
+            max-width: 70%;
+            word-wrap: break-word;
+            margin-right: 30%;
+        }
+        .yy
+        {
+            text-align: left;
+        }
+        .cc{
+            text-align: left;
+        }
+.user-message,
+.computer-message {
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.user-message::after,
+.computer-message::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.user-message {
+    float: right;
+    background-color: #dcf8c6;
+    border-radius: 20px;
+    padding: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.computer-message {
+    float: left;
+    background-color:rgb(169, 173, 164);
+    border-radius: 20px;
+    padding: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+.term_message
+{
+    background-color:rgb(247, 94, 94);
+    border-radius: 20px;
+    padding: 12px;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+.compliment
+{
+    background-color:rgb(247, 211, 94);
+    border-radius: 20px;
+    padding: 12px;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">
+            Word game
+            <div class="cc" id ="cc"><span></span></div>
+        </div>
+        <ul id="chat-list"></ul>
+        <form id="chat-form">
+            {% csrf_token %}
+            <input type="text" id="user_message" name="user_message" required>
+             {% if valid %}
+            <button type="submit" id="send-button">Send</button>
+            {% endif %}
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#chat-form').submit(function(e) {
+                e.preventDefault();
+                var userMessage = $('#user_message').val();
+                var csrfToken = $('input[name="csrfmiddlewaretoken"]').val(); 
+                $.ajax({
+                    url: "/chat/",
+                    type: "POST",
+                    headers: { "X-CSRFToken": csrfToken },
+                    data: { user_message: userMessage },
+                    success: function(data) {
+                        if (data.status === 'success') {
+                            if (data.message && data.computer_response) {
+                                var chatList = $('#chat-list');
+                                chatList.append('<li class="message-container"><div class="user-message">' + data.message + '</div></li>');
+                                chatList.append('<li class="message-container"><div class="computer-message">' + data.computer_response + '</div></li>');
+                                $('#user_message').val('');
+                                chatList.scrollTop(chatList[0].scrollHeight);
+                                document.getElementById("cc").innerHTML ="<span>Computer : "+data.comp+"</span>"+"<div class='yy' id ='yy'><span>You : "+ data.usr+"</span>";
+                            }
+                        }else if (data.status === 'fail')
+                        {
+                            if (data.message && data.term_message) {
+                                var chatList = $('#chat-list');
+                                chatList.append('<li class="message-container"><div class="user-message">' + data.message + '</div></li>');
+                                chatList.append('<li class="message-container"><div class="term_message">' + data.term_message + '</div></li>');
+                                chatList.append('<li class="message-container"><div class="compliment">' + data.compliment + '</div></li>');
+                                $('#user_message').val('');
+                                chatList.scrollTop(chatList[0].scrollHeight);
+                            }
+                            document.getElementById('chat-form').style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
