@@ -35,7 +35,6 @@ def signup_view(request):
 def chat(request):
     alpha =[]
     timeout = 8
-    last_word = ""
     for i in range(97,97+26,1):                      
             alpha.append(chr(i))
     if request.method == 'POST':
@@ -50,16 +49,17 @@ def chat(request):
             user_score=messages.first().user_score
             com_score = messages.first().computer_score
             
-            
-        com_word = transform2(user_message.lower(), words,alpha)
+        user_content = Message.objects.filter(user=user).values_list('content', flat=True)
+        user_computer_response = Message.objects.filter(user=user).values_list('computer_response', flat=True)    
+        com_word = transform2(user_message.lower(), words,alpha,user_content,user_computer_response)
         if com_word == " ":
             computer_response = f"You loose<br>Because of illegal word <q>{user_message}</q>"
             return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': "Computer has won the game"})
         
         if com_word == None:
             return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': f"{user.username}won the game"})
-        existing_content = Message.objects.filter(content=user_message.lower()).exists()
-        existing_computer_response = Message.objects.filter(computer_response=user_message.lower()).exists()
+        existing_content = Message.objects.filter(user=request.user,content=user_message.lower()).exists()
+        existing_computer_response = Message.objects.filter(user=request.user,computer_response=user_message.lower()).exists()
         
         if previous_message_time:
             current_time = timezone.now()
@@ -95,13 +95,13 @@ def transform1(file,alpha):
             list2.append(temp_list) 
         return list2
 
-def transform2(word, list1,alpha):
+def transform2(word, list1,alpha,user_content,user_computer_response):
         lastchar = word[-1]
         if word.isalpha():
             pos = alpha.index(lastchar)
             templist = list1[pos]
-            content =Message.objects.values_list('content', flat=True)
-            computer_response =Message.objects.values_list('computer_response', flat=True)
+            content =user_content
+            computer_response =user_computer_response
             max_size_word = " "
             for new_word in templist:
                 if new_word not in content and new_word not in computer_response:
