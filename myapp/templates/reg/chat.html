@@ -170,8 +170,8 @@
                         if (data.status === 'success') {
                             if (data.message && data.computer_response) {
                                 var chatList = $('#chat-list');
-                                chatList.append('<li class="message-container"><div class="user-message">' + data.message + '</div></li>');
-                                chatList.append('<li class="message-container"><div class="computer-message">' + data.computer_response + '</div></li>');
+                                chatList.append('<li class="message-container"><div class="user-message"> You: ' + data.message + '</div></li>');
+                                chatList.append('<li class="message-container"><div class="computer-message">Computer : ' + data.computer_response + '</div></li>');
                                 $('#user_message').val('');
                                 chatList.scrollTop(chatList[0].scrollHeight);
                                 document.getElementById("cc").innerHTML ="<span>Computer : "+data.comp+"</span>"+"<div class='yy' id ='yy'><span>You : "+ data.usr+"</span>";
@@ -180,7 +180,7 @@
                         {
                             if (data.message && data.term_message) {
                                 var chatList = $('#chat-list');
-                                chatList.append('<li class="message-container"><div class="user-message">' + data.message + '</div></li>');
+                                chatList.append('<li class="message-container"><div class="user-message"> You: ' + data.message + '</div></li>');
                                 chatList.append('<li class="message-container"><div class="term_message">' + data.term_message + '</div></li>');
                                 chatList.append('<li class="message-container"><div class="compliment">' + data.compliment + '</div></li>');
                                 $('#user_message').val('');
