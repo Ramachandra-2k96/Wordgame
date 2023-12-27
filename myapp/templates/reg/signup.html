@@ -54,6 +54,9 @@
             cursor: pointer;
             width: 100%;
         }
+        a{
+            padding-left: 80px;
+        }
 
         button:hover {
             background-color: #218838;
@@ -62,6 +65,10 @@
         @media only screen and (max-width: 600px) {
             form {
                 width: 80%;
+            }
+            a{
+                padding-left: 55px;
+                font-size: small;
             }
         }
     </style>
@@ -77,6 +84,8 @@
     <label for="id_password2">Confirm Password:</label>
     {{ form.password2 }}
     <button type="submit">Signup</button>
+    <a href="{% url 'login' %}"> Go to login page</a>
   </form>
+  
 </body>
 </html>
