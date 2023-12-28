@@ -56,7 +56,7 @@ def chat(request):
         user_computer_response = Message.objects.filter(user=user).values_list('computer_response', flat=True)    
         com_word = transform2(user_message.lower(), words,alpha,user_content,user_computer_response)
         if com_word == " ":
-            computer_response = f"You loose<br>Because of illegal word <q>{user_message}</q>"
+            computer_response = f"You lose.<br>Because of illegal word <q>{user_message}</q>"
             return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': "Computer has won the game"})
         
         if com_word is None:
@@ -68,16 +68,16 @@ def chat(request):
             current_time = timezone.now()
             time_difference = current_time - previous_message_time
             if time_difference.total_seconds() > timeout:
-                computer_response = f"You loose<br>Because you took {time_difference.total_seconds()} s extra time"
+                computer_response = f"You lose.<br>Because you took {time_difference.total_seconds()} s extra time"
                 return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': "Computer has won the game By Default"})
             
         if previous_message_time:
             if not messages.first().computer_response[-1].lower() == user_message[0].lower():
-                computer_response = f"You loose<br>Because Starting letter of <q>{user_message}</q> and last letter of <q>{messages.first().computer_response}</q> is different"
+                computer_response = f"You lose.<br>Because Starting letter of <q>{user_message}</q> and last letter of <q>{messages.first().computer_response}</q> is different"
                 return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response, 'compliment': "Computer has won the game By Default"})
         
         if existing_content or existing_computer_response:
-            computer_response = f"You loose<br>Because <q>{user_message}</q> already used"
+            computer_response = f"You lose.<br>Because <q>{user_message}</q> already used"
             return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': "Computer has won the game By Default"})
         computer_response = f"{com_word}"
 
