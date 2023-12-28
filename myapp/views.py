@@ -72,7 +72,7 @@ def chat(request):
                 return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response,'compliment': "Computer has won the game By Default"})
             
         if previous_message_time:
-            if not(messages.first().computer_response[-1]==user_message[0]):
+            if not messages.first().computer_response[-1].lower() == user_message[0].lower():
                 computer_response = f"You loose<br>Because Starting letter of <q>{user_message}</q> and last letter of <q>{messages.first().computer_response}</q> is different"
                 return JsonResponse({'status': 'fail', 'message': user_message, 'term_message': computer_response, 'compliment': "Computer has won the game By Default"})
         
